@@ -26,16 +26,16 @@ def main():
         types.Content(role="user", parts=[types.Part(text=user_prompt)]),
     ]
 
-    generate_content(client, messages)
+    generate_content(client, messages, user_prompt, args.verbose)
 
 
-def generate_content(client, messages):
+def generate_content(client, messages, user_prompt, verbose):
     response = client.models.generate_content(
         model="gemini-2.0-flash-001",
         contents=messages,
     )
-    if args.verbose:
-        print('User prompt : ' + user_prompt)
+    if verbose:
+        print('User prompt: ' + user_prompt)
         print("Prompt tokens:", response.usage_metadata.prompt_token_count)
         print("Response tokens:", response.usage_metadata.candidates_token_count)
     print("Response:")
