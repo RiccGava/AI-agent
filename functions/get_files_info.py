@@ -9,14 +9,17 @@ def get_files_info(working_directory, directory="."):
 		return error
 	if os.path.isdir(abs_attempt_path) == False:
 		return f'Error: "{directory}" is not a directory'
-	content = [f for f in os.listdir(abs_attempt_path)]
+	try:
+		content = [f for f in os.listdir(abs_attempt_path)]
+	except Exception as e:
+		return f'Error: Issues with os.listdir. {e}'
 	for file in content:
 		try:
-			file_path = os.path.join(abs_attempt_path, name)
 			name = file
+			file_path = os.path.join(abs_attempt_path, name)
 			size = os.path.getsize(file_path)
 			is_dir = os.path.isdir(file_path)
-			print(f'- {name}: file_size={size} bytes, is_dir={is_dir}')
+			yield(f'- {name}: file_size={size} bytes, is_dir={is_dir}')
 		except Exception as e:
 			return f'Error: failed to process file. {e}'
 			
