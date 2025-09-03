@@ -13,14 +13,14 @@ def get_files_info(working_directory, directory="."):
 		content = [f for f in os.listdir(abs_attempt_path)]
 	except Exception as e:
 		return f'Error: Issues with os.listdir. {e}'
-	string = ""
+	lst = []
 	for file in content:
 		try:
 			name = file
 			file_path = os.path.join(abs_attempt_path, name)
 			size = os.path.getsize(file_path)
 			is_dir = os.path.isdir(file_path)
-			string.join(f'- {name}: file_size={size} bytes, is_dir={is_dir}\n')
+			lst.append(f'- {name}: file_size={size} bytes, is_dir={is_dir}\n')
 		except Exception as e:
 			return f'Error: failed to process file. {e}'
-	return string
+	return "\n".join(lst)
