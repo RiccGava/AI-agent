@@ -14,7 +14,8 @@ def run_python_file(working_directory, file_path, args=[]):
 	if file_path.endswith('.py') == False:
 		return f'Error: "{file_path}" is not a Python file.'
 	try:
-		process_obj = subprocess.run(f'python {abs_f} {args}', capture_output = True, timeout = 30, cwd = abs_wd, check = False, text = True)
+		commands = ['python', abs_f]+args
+		process_obj = subprocess.run(commands, capture_output = True, timeout = 30, cwd = abs_wd, check = False, text = True)
 		stdout = process_obj.stdout
 		stderr = process_obj.stderr
 		rs = f'STDOUT: {stdout}\nSTDERR: {stderr}\n'
