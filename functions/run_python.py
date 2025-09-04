@@ -9,7 +9,7 @@ def run_python_file(working_directory, file_path, args=[]):
 		return f'Error during path conversion'
 	if (abs_f.startswith(abs_wd) == False):
 		return f'Error: Cannot execute "{file_path}" as it is outside the permitted working directory'
-	if os.path.exists(os.path.dirname(abs_f) == False):
+	if os.path.exists(abs_f) == False:
 		return f'Error: File "{file_path}" not found.'
 	if abs_f.endswith('.py') == False:
 		return f'Error: "{file_path}" is not a Python file.'
