@@ -21,7 +21,7 @@ def run_python_file(working_directory, file_path, args=[]):
 		rs = f'STDOUT: {stdout}\nSTDERR: {stderr}\n'
 		if (process_obj.returncode != 0):
 			rs += f'Process exited with code "{process_obj.returncode}"'
-		if not stdout or not stderr:
+		if not stdout and not stderr:
 			return f'No output produced.'
 	except Exception as e:
 		return f"Error: executing Python file: {e}"
