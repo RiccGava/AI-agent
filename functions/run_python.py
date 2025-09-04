@@ -14,13 +14,13 @@ def run_python_file(working_directory, file_path, args=[]):
 	if file_path.endswith('.py') == False:
 		return f'Error: "{file_path}" is not a Python file.'
 	try:
-		process_obj = subprocess.run(abs_f, capture_output = True, timeout = 30, cwd = abs_wd, check = False)
+		process_obj = subprocess.run(f'python {abs_f} {args}', capture_output = True, timeout = 30, cwd = abs_wd, check = False, text = True)
 		stdout = process_obj.stdout
 		stderr = process_obj.stderr
 		rs = f'STDOUT: {stdout}\nSTDERR: {stderr}\n'
 		if (process_obj.returncode != 0):
 			rs += f'Process exited with code "{process_obj.returncode}"'
-		if (process_obj.check == False):
+		if not stdout or not stderr:
 			return f'No output produced.'
 	except Exception as e:
 		return f"Error: executing Python file: {e}"
