@@ -11,13 +11,13 @@ def run_python_file(working_directory, file_path, args=[]):
 		return f'Error: Cannot execute "{file_path}" as it is outside the permitted working directory'
 	if os.path.exists(abs_f) == False:
 		return f'Error: File "{file_path}" not found.'
-	if abs_f.endswith('.py') == False:
+	if file_path.endswith('.py') == False:
 		return f'Error: "{file_path}" is not a Python file.'
 	try:
-		process_obj = subprocess.run(args, capture_output = True, timeout = 30, cwd = abs_wd, check = True)
+		process_obj = subprocess.run(abs_f, capture_output = True, timeout = 30, cwd = abs_wd, check = False)
 		stdout = process_obj.stdout
 		stderr = process_obj.stderr
-		rs = f'STDOUT: "{stdout}"\nSTDERR: "{stderr}"\n'
+		rs = f'STDOUT: {stdout}\nSTDERR: {stderr}\n'
 		if (process_obj.returncode != 0):
 			rs += f'Process exited with code "{process_obj.returncode}"'
 		if (process_obj.check == False):
