@@ -1,22 +1,35 @@
 import os
-from functions.config import *
+from config import MAX_CHARS
+from google.genai import types
 
 def get_file_content(working_directory, file_path):
-	try:
-		abs_wd = os.path.abspath(working_directory)
-		abs_f = os.path.abspath(os.path.join(working_directory,file_path))
-	except Exception as e:
-		return f'Error: error during path conversion'
-	if (abs_f.startswith(abs_wd) == False):
-		return f'Error: Cannot read "{file_path}" as it is outside the permitted working directory'
-	if os.path.isfile(abs_f) == False:
-		return f'Error: File not found or is not a regular file: "{file_path}"'
-	try:
-		with open(abs_f, 'r') as f:
-			f_string = f.read(MAX_CHAR)
-			if f.read(1)!="":
-				f_string += f'[...File "{file_path}" truncated at 10000 characters]'
-	except Exception as e:
-		return f'Error: Could not read file "{e}"'
-	return f_string
-		
+    abs_working_dir = os.path.abspath(working_directory)
+    abs_file_path = os.path.abspath(os.path.join(working_directory, file_path))
+    if not abs_file_path.startswith(abs_working_dir):
+        return f'Error: Cannot read "{file_path}" as it is outside the permitted working directory'
+    if not os.path.isfile(abs_file_path):
+        return f'Error: File not found or is not a regular file: "{file_path}"'
+    try:
+        with open(abs_file_path, "r") as f:
+            content = f.read(MAX_CHARS)
+            if os.path.getsize(abs_file_path) > MAX_CHARS:
+                content += (
+                    f'[...File "{file_path}" truncated at {MAX_CHARS} characters]'
+                )
+        return content
+    except Exception as e:
+        return f'Error reading file "{file_path}": {e}'
+
+schema_get_file_content = types.FunctionDeclaration(
+	name = "get_files_info", 
+	description = "Get the content of a file from a specified path within the working directory",
+	parameters = types.Schema(
+		type = types.Type.OBJECT,
+		properties = {
+			'file_path': types.Schema(
+				type = types.Type.STRING,
+				description = 'The relative file path of the file you need to get the content of relative to working directory',
+			),
+		},
+	),
+)
