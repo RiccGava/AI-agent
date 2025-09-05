@@ -55,7 +55,9 @@ def generate_content(client, messages, verbose):
 				result = call_function(function_call_part, verbose)
 				if hasattr(result.parts[0].function_response, 'response'):
 					if verbose:
-						print(f"-> {result.parts[0].function_response.response}")
+						print(f"DEBUG: Full function response dict: {result.parts[0].function_response.response}")
+						print(f"DEBUG: Value under 'result' key: {result.parts[0].function_response.response.get('result')}")
+						print(f"-> {result.parts[0].function_response.response['result']}")
 				else:
 					raise Exception('no response from function call')
 			except Exception as e:
