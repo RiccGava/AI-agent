@@ -54,8 +54,15 @@ def generate_content(client, messages, verbose):
         return response.text
 
     for function_call_part in response.function_calls:
-        print(f"Calling function: {function_call_part.name}({function_call_part.args})")
-
+	try:
+		result = call_function(function_call_part, verbose)
+		if hasattr(result.parts[0].function_response, 'response'):
+			if verbose:
+				print(f"-> {function_call_result.parts[0].function_response.response}")
+	except Exception as e:
+		return f'Error: {e}'
+	
+		
 
 if __name__ == "__main__":
     main()
