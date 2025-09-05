@@ -15,10 +15,19 @@ available_functions = types.Tool(
     ]
 )
 
-def call_functio(function_call_part, verbose = False):
-	if 'verbose' in function_call_part.args:
-		print(f"Calling function: {function_call_part.name}({function_call_part.args})")i
+def call_function(function_call_part, verbose = False):
+	if not verbose:
+		print(f"Calling function: {function_call_part.name}({function_call_part.args})")
 	else:
 		print(f" - Calling function: {function_call_part.name}")
 	working_directory = './calculator'
+	function_map = {
+		"write_file": write_file,
+		'run_python_file': run_python_file,
+		'get_files_info': get_files_info,
+		'get_file_content': get_file_content,
+	}
+	function_call_part.args.working_directory = working_directory
+	function_to_call = function_map[function_call_part.name]
+	result = function_to_call(**function_call_part.args)
 	
