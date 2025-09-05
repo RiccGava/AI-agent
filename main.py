@@ -50,18 +50,18 @@ def generate_content(client, messages, verbose):
 		print("Prompt tokens:", response.usage_metadata.prompt_token_count)
 		print("Response tokens:", response.usage_metadata.candidates_token_count)
 			if not response.function_calls:
-			return response.text
+				return response.text
 			for function_call_part in response.function_calls:
-			try:
-				result = call_function(function_call_part, verbose)
-				if hasattr(result.parts[0].function_response, 'response'):
-					if verbose:
-						print(f"-> {result.parts[0].function_response.response}")
-				else:
-					raise Exception('no response from function call')
-			except Exception as e:
-				return f'Error: {e}'
-	return result
+				try:
+					result = call_function(function_call_part, verbose)
+					if hasattr(result.parts[0].function_response, 'response'):
+						if verbose:
+							print(f"-> {result.parts[0].function_response.response}")
+					else:
+						raise Exception('no response from function call')
+				except Exception as e:
+					raise Exception(f'Error: {e}')
+				return result
 
 
 		if __name__ == "__main__":
