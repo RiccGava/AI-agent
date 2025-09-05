@@ -16,7 +16,7 @@ available_functions = types.Tool(
 )
 
 def call_function(function_call_part, verbose = False):
-	if not verbose:
+	if verbose:
 		print(f"Calling function: {function_call_part.name}({function_call_part.args})")
 	else:
 		print(f" - Calling function: {function_call_part.name}")
@@ -27,7 +27,27 @@ def call_function(function_call_part, verbose = False):
 		'get_files_info': get_files_info,
 		'get_file_content': get_file_content,
 	}
-	function_call_part.args.working_directory = working_directory
-	function_to_call = function_map[function_call_part.name]
+	function_call_part.args['working_directory'] = working_directory
+	if function_call_part.name in function_map:
+		function_to_call = function_map[function_call_part.name]
+	else:
+		return types.Content(
+    		role="tool",
+    		parts=[
+        		types.Part.from_function_response(
+            		name=function_name,
+            		response={"error": f"Unknown function: {function_name}"},
+        		)
+    		],
+	)
 	result = function_to_call(**function_call_part.args)
+	return types.Content(
+		role='tool',
+		parts = [
+			types.Part.from_function_response(
+				name=function_name,
+				response = {'result': result},
+			)
+		],
+	)
 	
