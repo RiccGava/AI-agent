@@ -34,8 +34,20 @@ def main():
 		types.Content(role="user", parts=[types.Part(text=user_prompt)]),
 	]
 
-	generate_content(client, messages, verbose)
-
+	for i in range(20):
+		try:
+			response = generate_content(client, messages, verbose)
+			for c in response.candidates:
+				if c.text != None:
+					print(c.text)
+					break
+				if c.function_call != None:
+					res = call_function(c.function_call)
+					messages.append(types.Content(role='user', parts = [types.Part(function_response = res.response)]))
+				messages.append(c.content)
+		except Exception as e:
+			print(f'Raised exception in loop call')
+			
 
 def generate_content(client, messages, verbose):
 	response = client.models.generate_content(
@@ -55,8 +67,6 @@ def generate_content(client, messages, verbose):
 				result = call_function(function_call_part, verbose)
 				if hasattr(result.parts[0].function_response, 'response'):
 					if verbose:
-						print(f"DEBUG: Full function response dict: {result.parts[0].function_response.response}")
-						print(f"DEBUG: Value under 'result' key: {result.parts[0].function_response.response.get('result')}")
 						print(f"-> {result.parts[0].function_response.response['result']}")
 				else:
 					raise Exception('no response from function call')
