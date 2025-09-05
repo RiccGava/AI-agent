@@ -21,7 +21,7 @@ def get_file_content(working_directory, file_path):
         return f'Error reading file "{file_path}": {e}'
 
 schema_get_file_content = types.FunctionDeclaration(
-	name = "get_files_info", 
+	name = "get_file_content", 
 	description = "Get the content of a file from a specified path within the working directory",
 	parameters = types.Schema(
 		type = types.Type.OBJECT,

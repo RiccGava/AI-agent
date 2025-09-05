@@ -47,11 +47,7 @@ schema_run_python_file = types.FunctionDeclaration(
 				),
 			'args': types.Schema(
 				type = types.Type.STRING,
-				description = 'Specifies the additional arguments to run the function with. Can be empty too. These will be later added automatically to "commands" variable after the interpreter and the file path',
-				),
-			'commands': types.Schema(
-				type = types.Type.ARRAY,
-				description = """ At the index zero you'll find the interpreter to run the file with, on index one you can find the absolute path of the file to run. if you find anything in this list after, those are the additional argument to run the file with""",
+				description = 'Specifies the additional arguments to run the function with. Can be empty too.',
 				),
 		},
 	),
